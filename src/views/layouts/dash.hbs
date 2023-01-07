@@ -1,0 +1,103 @@
+<html lang="es">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="/assets/img/apple-icon.png"
+    />
+    <link rel="icon" type="image/png" href="/assets/img/favicon.png" />
+    <title>
+      Sistema de Inventarios
+    </title>
+    <!--     Fonts and icons     -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
+      rel="stylesheet"
+    />
+    <!-- Núcleo Icons -->
+    <link href="/assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="/assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script
+      src="https://kit.fontawesome.com/42d5adcbca.js"
+      crossorigin="anonymous"
+    ></script>
+    <link href="/assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link
+      id="pagestyle"
+      href="/assets/css/argon-dashboard.css?v=2.0.5"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/css/main.css">
+
+  </head>
+  <body class="g-sidenav-show bg-gray-100 dark-version">
+    <div class="min-height-300 bg-primary position-absolute w-100"></div>
+    
+    {{> sideBar }}
+
+    <main class="main-content position-relative border-radius-lg ">
+
+    {{> navbar }}
+
+      <div class="container-fluid py-4">
+
+        {{{ body }}}
+
+        <footer class="footer pt-3  ">
+          {{> footer}}
+        </footer>
+      </div>
+    </main>
+
+    {{> notificationMessage}}
+
+    <!--   Core JS Files   -->  
+    <script src="/assets/js/core/popper.min.js"></script>
+    <script src="/assets/js/core/bootstrap.min.js"></script>
+    <script src="/assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="/assets/js/plugins/smooth-scrollbar.min.js"></script>
+    <!-- Kanban scripts -->
+    <script src="/assets/js/plugins/dragula/dragula.min.js"></script>
+    <script src="/assets/js/plugins/jkanban/jkanban.js"></script>
+
+    <!-- Github buttons -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="/assets/js/argon-dashboard.min.js?v=2.0.5"></script>
+    <script>
+      //active dark version
+      document.getElementById('dark-version').click();
+      document.getElementById('dark-version').addEventListener('click', () => {
+        if (!document.body.classList.contains("dark-version")) {
+          var elements = document.getElementsByClassName("nav-link");
+          for (var i = 0; i < elements.length; i++) {
+            elements[i].style.color = "#a0a4b4";
+          }
+          var elements = document.getElementsByClassName("nav-link-text ms-1");
+          for (var i = 0; i < elements.length; i++) {
+            elements[i].style.color = "#cfd2da";
+          }
+          var elements = document.getElementsByClassName("nav-link active");
+          for (var i = 0; i < elements.length; i++) {
+            if (document.querySelectorAll('[data-bs-toggle="collapse"]')) {
+              elements[i].style.backgroundColor = "#293357";
+              elements[i].style.boxShadow = "none";
+            }
+          }
+        }
+      });
+    </script>
+
+
+  </body>
+
+</html>

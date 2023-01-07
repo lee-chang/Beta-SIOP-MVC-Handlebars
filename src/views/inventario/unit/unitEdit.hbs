@@ -1,0 +1,124 @@
+<div class="row">
+  <div class="col-12">
+    <div class="multisteps-form">
+
+        {{> buttonBack}}
+
+      <!--form panels-->
+      <div class="row">
+        <div class="col-12 col-lg-8 m-auto">
+          <form action="/inventario/unidad-medida/{{units._id}}/edit" method="POST" class="multisteps-form__form mb-8">
+            <!--single form panel-->
+            <div
+              class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active"
+              data-animation="FadeIn"
+            >
+              <h5 class="font-weight-bolder">Agregar unidad de medida</h5>
+              <div class="multisteps-form__content">
+                <div class="row mt-3">
+                  <div class="col-12 col-sm-6">
+                    <label>Código</label>
+                    <input
+                      class="multisteps-form__input form-control"
+                      type="text"
+                      placeholder="cm"
+                      name="code"
+                      value="{{units.code}}"
+                    />
+                  </div>
+                  <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+                    <label>Nombre</label>
+                    <input
+                      class="multisteps-form__input form-control"
+                      type="text"
+                      placeholder="centímetro"
+                      name="name"
+                      value="{{units.name}}"
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 mt-sm-0 mt-4 text-color-black">
+                    <label class="mt-4">Unidad Base</label>
+                    <select
+                      class="form-control bg-white"
+                      name="unitBase"
+                      id="choices-unidad-base"
+                    >
+                      <option value="N/A" selected>Sin unidad base</option>
+                      {{#each unit}}
+                      <option value="{{code}}">{{name}}</option>
+                      {{/each}}
+                    </select>
+                  </div>
+                </div>
+                <div id="no-form-base-unit" class="row mt-3 hidden">
+                  <div class="col-12 col-sm-6">
+                    <label>Operador</label>
+                    <input
+                      class="multisteps-form__input form-control"
+                      type="text"
+                      placeholder="*"
+                      name="operator"
+                      value="{{units.operator}}"
+                    />
+                  </div>
+                  <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+                    <label>Valor de Operación</label>
+                    <input
+                      class="multisteps-form__input form-control"
+                      type="text"
+                      placeholder="100"
+                      name="operationValue"
+                      value="{{units.operationValue}}"
+                    />
+                  </div>
+                </div>
+                <div class="button-row d-flex mt-4">
+                  <button
+                    class="btn bg-gradient-primary ms-auto mb-0"
+                    type="submit"
+                    title="Send"
+                  >Guardar</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/plugins/choices.min.js"></script>
+<script src="/assets/js/plugins/multistep-form.js"></script>
+
+<script>
+
+    if (document.getElementById('choices-unidad-base')) {
+        var element = document.getElementById('choices-unidad-base');
+        const example = new Choices(element, {
+            searchEnabled: false
+        });
+    };
+
+    //Cambia el color del background de los choice list
+    if(document.querySelectorAll(".choices__list--dropdown")){
+        document.querySelectorAll(".choices__list--dropdown").forEach(e=>e.className+= " bg-white" )
+    }
+
+    const choiceUnidadBase = document.getElementById("choices-unidad-base")
+    const noFormBaseUnit = document.getElementById("no-form-base-unit")
+    let visibilityFBU =  "0"
+    choiceUnidadBase.addEventListener('change', (event) => {
+        if(choiceUnidadBase.value != "N/A"){
+            //remove class to hide
+            noFormBaseUnit.classList.remove("hidden")
+        }
+        if(choiceUnidadBase.value == "N/A"){
+            //add class to hide
+            noFormBaseUnit.classList.add("hidden")
+        }
+    });
+
+</script>

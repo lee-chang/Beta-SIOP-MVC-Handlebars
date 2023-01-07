@@ -1,0 +1,118 @@
+<div class="position-fixed bottom-2 end-1 z-index-2">
+
+  <div
+    class="toast fade hide p-2 bg-white"
+    role="alert"
+    aria-live="assertive"
+    id="alertSuccess"
+    aria-atomic="true"
+  >
+    <div class="toast-header border-0">
+      <i class="ni ni-check-bold text-success me-2"></i>
+      <span class="me-auto font-weight-bold">{{title}}</span>
+      <small class="text-body">{{time}}</small>
+      <i
+        class="fas fa-times text-md ms-3 cursor-pointer"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></i>
+    </div>
+    <hr class="horizontal dark m-0" />
+    <div class="toast-body">
+      {{description}}
+    </div>
+  </div>
+
+  <div
+    class="toast fade hide p-2 mt-2 bg-gradient-info"
+    role="alert"
+    aria-live="assertive"
+    id="alertInfo"
+    aria-atomic="true"
+  >
+    <div class="toast-header bg-transparent border-0">
+      <i class="ni ni-bell-55 text-white me-2"></i>
+      <span class="me-auto text-white font-weight-bold">{{title}}</span>
+      <small class="text-white">{{time}}</small>
+      <i
+        class="fas fa-times text-md text-white ms-3 cursor-pointer"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></i>
+    </div>
+    <hr class="horizontal light m-0" />
+    <div class="toast-body text-white">
+      {{description}}
+    </div>
+  </div>
+  
+  <div
+    class="toast fade hide p-2 mt-2 bg-white"
+    role="alert"
+    aria-live="assertive"
+    id="alertWarning"
+    aria-atomic="true"
+  >
+    <div class="toast-header border-0">
+      <i class="ni ni-spaceship text-warning me-2"></i>
+      <span class="me-auto font-weight-bold">{{title}}</span>
+      <small class="text-body">{{time}}</small>
+      <i
+        class="fas fa-times text-md ms-3 cursor-pointer"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></i>
+    </div>
+    <hr class="horizontal dark m-0" />
+    <div class="toast-body">
+      {{description}}
+    </div>
+  </div>
+
+  <div
+    class="toast fade hide p-2 mt-2 bg-white"
+    role="alert"
+    aria-live="assertive"
+    id="alertDanger"
+    aria-atomic="true"
+  >
+    <div class="toast-header border-0">
+      <i class="ni ni-notification-70 text-danger me-2"></i>
+      <span
+        class="me-auto text-gradient text-danger font-weight-bold"
+      >{{title}}</span>
+      <small class="text-body">{{time}}</small>
+      <i
+        class="fas fa-times text-md ms-3 cursor-pointer"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></i>
+    </div>
+    <hr class="horizontal dark m-0" />
+    <div class="toast-body">
+      {{description}}
+    </div>
+  </div>
+
+</div>
+
+<script src="/js/notificationMessage.js"></script>
+
+<script>
+  {{#each errors}}
+    showMessageError( "{{title}}", "{{description}}", "{{time}}"  );
+  {{/each}}
+    
+  {{#each alertSuccess}}
+    showMessageSuccess( "{{title}}", "{{description}}", "{{time}}"  );
+  {{/each}}
+
+  {{#each alertInfo}}
+    showMessageInfo( "{{title}}", "{{description}}", "{{time}}"  );
+  {{/each}}
+
+  {{#each alertWarning}}
+    showMessageWarning( "{{title}}", "{{description}}", "{{time}}"  );
+  {{/each}}
+
+</script>
