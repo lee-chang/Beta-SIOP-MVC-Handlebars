@@ -13,9 +13,11 @@
               class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active"
               data-animation="FadeIn"
             >
-              <div class="card mt-4">
+
+            {{!-- INFORMATION BASIC --}}
+            <div class="card mt-4">
                 <div class="card-header">
-                  <h5 class="font-weight-bolder">Agregar Categoría</h5>
+                  <h5 class="font-weight-bolder">Información básica</h5>
                 </div>
 
               <div class="card-body pt-0">
@@ -26,7 +28,7 @@
                       class="multisteps-form__input form-control"
                       type="text"
                       name="code"
-                      placeholder="H-001"
+                      placeholder="ACR-001"
                       value="{{categoria.code}}"
                       autofocus
                     />
@@ -38,63 +40,65 @@
                       class="multisteps-form__input form-control"
                       type="text"
                       name="name"
-                      placeholder="Hilo Piramide #40"
+                      placeholder="Acerado"
                       value="{{categoria.name}}"
                     />
                   </div>
                 </div>
+              </div>
+            </div>
+            
+            {{!-- INFORMATION PROVEEDORES --}}
+            <div class="card mt-4">
+              <div class="card-header">
+                <h5 class="font-weight-bolder">Sobre los proveedores</h5>
+              </div>
 
-                <div class="button-row d-flex mt-4">
+              <div class="card-body pt-0">
+                <div class="list mb-3">
+                    <ul id="proveedor-list" class="list-group">
+                        <input type="hidden" id="proveedor" name="proveedor" title="proveedor" value='[]'>
+                    </ul>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="row bg-gray-100 border-radius-lg p-2 my-4">
+                        <div class="col-sm-3 d-flex align-items-center">
+                            <p class="text-sm font-weight-bold my-auto ps-sm-2">AGREGAR PROVEEDOR</p>
+                        </div>
+                        <div class="col-sm-7 text-color-black">
+                          <select
+                          class="form-control"
+                          id="choices-proveedor"
+                          >
+                          
+                          <option value="" disabled selected hidden>Seleccionar ...</option>
+
+                          {{#each proveedor}}
+                            <option value="{{_id}}">{{nroId}} - {{name}}</option>
+                          {{/each}}
+                          </select>
+                        </div>
+                        {{!-- BUTTON ADD --}}
+                        <div class="col-sm-2 d-flex align-items-center">                                    
+                            <button id="bt-add-proveedor" class="btn btn-sm bg-gradient-dark my-sm-auto mt-2 mb-0" type="button">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                {{!-- BUTTON SAVE --}}
+                <div class="button-row d-flex">
                   <button
                     class="btn bg-gradient-primary ms-auto mb-0"
                     type="submit"
                     title="Send"
                   >Guardar</button>
                 </div>
-              </div>
-            </div>
 
-            <div class="card mt-4">
-                <div class="card-header">
-                  <h5 class="font-weight-bolder">Agregar Proveedores</h5>
-                </div>
-
-                <div class="card-body pt-0">
-                  <div class="list mb-3">
-                      <ul id="proveedor-list" class="list-group">
-                          <input type="hidden" id="proveedor" name="proveedor" title="proveedor" value='[]'>
-                      </ul>
-                  </div>
-                  <div class="card-body pt-0">
-                      <div class="row bg-gray-100 border-radius-lg p-2 my-4">
-                          <div class="col-sm-3 d-flex align-items-center">
-                              <p class="text-sm font-weight-bold my-auto ps-sm-2">AGREGAR PROVEEDOR</p>
-                          </div>
-                          <div class="col-sm-7 text-color-black">
-                            <select
-                            class="form-control"
-                            id="choices-proveedor"
-                            >
-                            
-                            <option value="" disabled selected hidden>Seleccionar ...</option>
-
-                            {{#each proveedor}}
-                              <option value="{{_id}}">{{nroId}} - {{name}}</option>
-                            {{/each}}
-                            </select>
-                          </div>
-                          {{!-- BUTTON ADD --}}
-                          <div class="col-sm-2 d-flex align-items-center">                                    
-                              <button id="bt-add-proveedor" class="btn btn-sm bg-gradient-dark my-sm-auto mt-2 mb-0" type="button">
-                                  <i class="fas fa-plus"></i>
-                              </button>
-                          </div>
-                      </div>
-                  </div>
               </div>
 
             </div>
-
           </form>
         </div>
       </div>
@@ -230,21 +234,23 @@
 </script>
 
 <script>
-  //Para agregar los datos del user al interfaz
-  const proveedor =  []
 
-  {{#each categoria.proveedor}}
-    var objProveedores = {
-        value:"{{this._id}}",
-        content:"{{this.nroId}} - {{this.name}}"
-    }
-    proveedor.push(objProveedores)
-  {{/each}}
 
-  if (proveedor.length>0){
-      proveedor.forEach( async (e) =>{
-        await addProveedor(e.value,  e.content);
-      })
+//Para agregar los datos del user al interfaz
+const proveedor =  []
+
+{{#each categoria.proveedor}}
+  var objProveedores = {
+      value:"{{this._id}}",
+      content:"{{this.nroId}} - {{this.name}}"
   }
+  proveedor.push(objProveedores)
+{{/each}}
+
+if (proveedor.length>0){
+    proveedor.forEach( async (e) =>{
+      await addProveedor(e.value,  e.content);
+    })
+}
 
 </script>

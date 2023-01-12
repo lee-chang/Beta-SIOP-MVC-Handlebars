@@ -1,5 +1,5 @@
-import CategoryHilos from "../../models/materialHiloCategory.js";
-import Hilos from "../../models/materialHilo.js";
+import CategoryHilos from "../../models/material/hiloCategory.js";
+import Hilos from "../../models/material/hilo.js";
 import UnitMedida from "../../models/unit.js";
 import Colors from "../../models/colors.js";
 import Proveedores from "../../models/proveedor.js";
@@ -134,7 +134,11 @@ export const HiloAddPost = async (req, res) => {
 
 export const HiloEdit = async (req, res) => {
   const { id } = req.params;
-  const hilo = await Hilos.findById(id).lean();
+  const hilo = await Hilos.findById(id).populate("color",{_id:1,codeColor:1}).populate("category",{_id:1}).populate("unit",{_id:1}).lean();
+
+  const categories = await CategoryHilos.find().lean();
+  const units = await UnitMedida.find().lean();
+  const colors = await Colors .find().lean();
 
   res.render("material/hilo/hiloEdit", {
       username: res.locals.user.username,
@@ -142,12 +146,96 @@ export const HiloEdit = async (req, res) => {
       indice1: indices[0].indice1,
       indice2: indices[0].indice2,
       indice3: indices[0].indice3,
-      hilo
+      hilo,
+      categories,
+      units,
+      colors
     });
 }
 
 export const HiloEditPost = async (req, res) => {
+  const { id } = req.params;
+  const { sku, name, description, color, marca, category, grosor, unit, minQuantity, priceRef } = req.body;
+  const hilo = await Hilos.findById(id).populate("color",{_id:1,codeColor:1}).populate("category",{_id:1}).populate("unit",{_id:1}).lean();
+
+  const categories = await CategoryHilos.find().lean();
+  const units = await UnitMedida.find().lean();
+  const colors = await Colors .find().lean();
+
+  const errors = [];
+  if (!sku) {
+    errors.push({
+      title: "No se registro el hilo",
+      description: "Por favor, ingrese un código",	
+      time: "Ahora",
+    });
+  }
+  if (!name) {
+    errors.push({
+      title: "No se registro el hilo",
+      description: "Por favor, ingrese el nombre del hilo",
+      time: "Ahora",
+    });
+  }
+  if (!category) {
+    errors.push({
+      title: "No se registro el hilo",
+      description: "Por favor, seleccione una categoría",
+      time: "Ahora",
+    });
+  }
+  if (!unit) {
+    errors.push({
+      title: "No se registro el hilo",
+      description: "Por favor, seleccione una unidad de medida",
+      time: "Ahora",
+    });
+  }
+  if (!color) {
+    errors.push({
+      title: "No se registro el hilo",
+      description: "Por favor, seleccione un color",
+      time: "Ahora",
+    });
+  }
+  if (!priceRef) {
+    errors.push({
+      title: "No se registro el hilo",
+      description: "Por favor, ingrese un precio",
+      time: "Ahora",
+    });
+  }
   
+  // Comprobar si el código de hilo es duplicado menos el mismo
+  const searchCode =  await Hilos.find({ sku:sku });
+  const dCode = searchCode.filter((item) => item._id != id);
+
+  if (dCode.length > 0) {
+    errors.push({
+      title: "No se registro el hilo",
+      description: "El código ya existe",
+      time: "Ahora",
+    });
+  }
+
+  if (errors.length > 0) {
+    res.render("material/hilo/hiloEdit", {
+      errors,
+      username: res.locals.user.username,
+      activeMateriales: indices[0].activeMateriales,
+      indice1: indices[0].indice1,
+      indice2: indices[0].indice2,
+      indice3: indices[0].indice3,
+      hilo,
+      categories,
+      units,
+      colors
+    });
+  }
+  else {
+    await Hilos.findByIdAndUpdate(id, req.body);
+    res.redirect("/material/hilo");
+  }
 }
 
 export const HiloDelete = async (req, res) => {
@@ -167,7 +255,7 @@ export const HiloDelete = async (req, res) => {
 
 
 export const CategoryHiloTable = async (req, res) => {
-  const categoria = await CategoryHilos.find().lean();
+  const categoria = await CategoryHilos.find().populate('proveedor').lean();
  
   res.render("material/hilo/hiloCategoryTable", {
       username: res.locals.user.username,
@@ -212,18 +300,10 @@ export const CategoryHiloAddPost = async (req, res) => {
       time: "Ahora",
     });
   }
-  
-  if (!proveedor) {
-    errors.push({
-      title: "No se registro la categoría",
-      description: "Por favor, seleccione un proveedor",
-      time: "Ahora",
-    });
-  }
 
   // Comprobar si el código de color es duplicado
-  const dcode = await CategoryHilos.findOne({ code: code });
-  if (dcode) {
+  const dCode = await CategoryHilos.findOne({ code: code });
+  if (dCode) {
     errors.push({
       title: "No se registro la categoría",
       description: "El código de la categoría ya existe",
@@ -248,21 +328,11 @@ export const CategoryHiloAddPost = async (req, res) => {
     await newHiloCategory.save();
     res.redirect("/material/hilo/categoria");
   }
-
-  res.render("material/hilo/hiloCategoryForm", {
-      username: res.locals.user.username,
-      activeMateriales: indices[0].activeMateriales,
-      indice1: indices[0].indice1,
-      indice2: indices[0].indice2,
-      indice3: indices[0].indice3,
-    });
 }
 
 export const CategoryHiloEdit = async (req, res) => {
   const { id } = req.params;
-  const categoria = await CategoryHilos.findById(id).populate("proveedor").lean();
-  console.log(categoria);
-  
+  const categoria = await CategoryHilos.findById(id).populate("proveedor", {nroId:1,name:1}).lean();
   const proveedor = await Proveedores.find().lean();
   res.render("material/hilo/hiloCategoryEdit", {
     username: res.locals.user.username,
@@ -278,6 +348,17 @@ export const CategoryHiloEdit = async (req, res) => {
 export const CategoryHiloEditPost = async (req, res) => {
   const { id } = req.params;
   const { code, name } = req.body;
+  const categoria = await CategoryHilos.findById(id).populate("proveedor", {nroId:1,name:1}).lean();
+  const proveedor = await Proveedores.find().lean();
+
+  //data para actualizar
+  const dataUpdate = {
+    code,
+    name,
+    proveedor
+  }
+
+
   const errors = [];
   if (!code) {
     errors.push({
@@ -294,10 +375,11 @@ export const CategoryHiloEditPost = async (req, res) => {
     });
   }
   
-  // Comprobar si el código de color es duplicado
-  const dcode = await CategoryHilos.findOne({ code: code });
+  // Comprobar si el código de color es duplicado menos el mismo
+  const searchCode =  await CategoryHilos.find({ code: code });
+  const dCode = searchCode.filter((item) => item._id != id);
 
-  if (dcode) {
+  if (dCode.length > 0) {
     errors.push({
       title: "No se registro la categoría",
       description: "El código de la categoría ya existe",
@@ -313,11 +395,11 @@ export const CategoryHiloEditPost = async (req, res) => {
       indice2: indices[0].indice2,
       indice3: indices[0].indice3,
       errors,
-      name,
-      code,
+      categoria,
+      proveedor
     })
   } else {
-    await CategoryHilos.findByIdAndUpdate(id, req.body);
+    await CategoryHilos.findByIdAndUpdate(id, dataUpdate);
     res.redirect("/material/hilo/categoria");
   }
 }

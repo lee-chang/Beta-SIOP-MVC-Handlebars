@@ -96,7 +96,6 @@
                 <tr>
                   <th>SKU</th>
                   <th>Nombre</th>
-                  <th>Descripción</th>
                   <th>Categoría</th>
                   <th>Color</th>
                   <th>Precio Ref.</th>
@@ -109,22 +108,18 @@
                 </tr>
               </thead>
               <tbody>
-                {{#each hilos}}
+                {{#each hilos }}
                   <tr>
-                    <td class="text-sm">
-                      <div class="d-flex">
-                        <div class="form-check my-auto">
-                          <input class="form-check-input" type="checkbox" title="elementCheck" value="{{_id}}">
-                        </div>
-                      </div>
-                    </td>
+
                     <td>
                       <div class="d-flex">
+                        <div class="form-check my-auto">
+                            <input class="form-check-input" type="checkbox" title='elementCheck' id="customCheck{{@index}}">
+                        </div>
                         <h6 class="ms-3 my-auto">{{sku}}</h6>
                       </div>
                     </td>
                     <td class="text-sm">{{name}}</td>
-                    <td class="text-sm">{{description}}</td>
                     <td class="text-sm">{{category.name}}</td>
                     <td class="text-sm">
                       <div class="d-flex">
@@ -171,7 +166,6 @@
                 <tr>
                   <th>SKU</th>
                   <th>Nombre</th>
-                  <th>Descripción</th>
                   <th>Categoría</th>
                   <th>Color</th>
                   <th>Precio Ref.</th>
@@ -195,119 +189,159 @@
 <script src="/assets/js/plugins/sweetalert.min.js"></script>
 <script src="/assets/js/plugins/datatables.js"></script>
 
-  <script>
-    if (document.getElementById('hilo-list')) {
-      const dataTableSearch = new simpleDatatables.DataTable("#hilo-list", {
-        searchable: true,
-        fixedHeight: false,
-        perPage: 7
+<script>
+  if (document.getElementById('hilo-list')) {
+    const dataTableSearch = new simpleDatatables.DataTable("#hilo-list", {
+      searchable: true,
+      fixedHeight: false,
+      perPage: 7
+      
+    });
+
+    document.querySelectorAll(".export").forEach(function(el) {
+      el.addEventListener("click", function(e) {
+        var type = el.dataset.type;
+
+        var data = {
+          type: type,
+          filename: "hilo-list" + type,
+        };
+
+        if (type === "csv") {
+          data.columnDelimiter = "|";
+        }
+
+        dataTableSearch.export(data);
       });
-
-      document.querySelectorAll(".export").forEach(function(el) {
-        el.addEventListener("click", function(e) {
-          var type = el.dataset.type;
-
-          var data = {
-            type: type,
-            filename: "hilo-list" + type,
-          };
-
-          if (type === "csv") {
-            data.columnDelimiter = "|";
-          }
-
-          dataTableSearch.export(data);
-        });
-      });
-    };
-  </script>
+    });
+  };
+</script>
 
 
 
 <script>
 
-    //PARA AGRUPAR A LOS ELEMENTOS SELECCIONADOS CHECK EN UN ARRAY
-  const itemsCheck = []
+//PARA AGREGAR EL ICONO DE ELIMINAR AL DATA TABLE
+if (document.getElementsByClassName('dataTable-top')) {
+  const divTrash = document.createElement("div")
+  divTrash.classList.add("dataTable-icon")
+  divTrash.innerHTML = `<div class="icon-container-dataTable">
+    <a
+    data-bs-toggle="tooltip"
+    data-bs-original-title="Delete proveedor"
+    class="actionDelete cursor-pointer"
+    onclick="return deleteItemsCheck()"
+    id="trashItemsIcon">
+    <i class="fas fa-trash text-danger"></i>
+    </a>
+  </div>`
+  const divDropdown = document.getElementsByClassName('dataTable-dropdown')
+  divDropdown[0].insertBefore(divTrash, divDropdown.lastElementChild)
 
-  const elementCheck = document.querySelectorAll("[title='elementCheck']")
+}
+
+//PARA AGRUPAR A LOS ELEMENTOS SELECCIONADOS EN UN ARRAY
+const itemsCheck = []
+
+//FUNCIÓN PARA MARCAR TODOS LOS CHECKBOX
+function checkAll() {
+  var elementCheck = document.querySelectorAll("[title='elementCheck']")
+
+  //limpiar array
+  itemsCheck.splice(0, itemsCheck.length)
+  //agregar todos los elementos al array
   elementCheck.forEach((item) => {
-    item.addEventListener("change", (e) => {
-      if (e.target.checked) {
-        itemsCheck.push(e.target.value)
-      } else {
-        itemsCheck.splice(itemsCheck.indexOf(e.target.value), 1)
-      }
+    item.checked = true
+    itemsCheck.push(item.value)
+  })
+}
+
+//FUNCIÓN PARA DESMARCAR TODOS LOS CHECKBOX
+function uncheckAll() {
+  var elementCheck = document.querySelectorAll("[title='elementCheck']")
+  elementCheck.forEach((item) => {
+    item.checked = false
+  })
+  //limpiar array
+  itemsCheck.splice(0, itemsCheck.length)
+}
+
+//FUNCION QUE TENGA UN EVENTO CLICK EN CADA CHECKBOX Y QUE AGREGUE O ELIMINE EL ELEMENTO DEL ARRAY
+function checkItem(id) {
+  var elementCheck = document.getElementById(id)
+  if (elementCheck.checked) {
+    itemsCheck.push(elementCheck.value)
+  } else {
+    itemsCheck.splice(itemsCheck.indexOf(elementCheck.value), 1)
+  }
+}
+
+//EVENTO CLICK EN CADA CHECKBOX
+function eventCustomCheck() {
+  var elementCheck = document.querySelectorAll("[title='elementCheck']")
+  elementCheck.forEach((item) => {
+    item.addEventListener("click", () => {
+      checkItem(item.id)
     })
   })
+}
+eventCustomCheck()
 
-  //PARA AGREGAR EL ICONO DE ELIMINAR AL DATA TABLE
-  if (document.getElementsByClassName('dataTable-top')) {
-    const divTrash = document.createElement("div")
-    divTrash.classList.add("dataTable-icon")
-    divTrash.innerHTML = `<div class="icon-container-dataTable">
-      <a
-      data-bs-toggle="tooltip"
-      data-bs-original-title="Delete hilo"
-      class="actionDelete cursor-pointer"
-      onclick="return deleteItemsCheck()"
-      id="trashItemsIcon">
-      <i class="fas fa-trash text-danger"></i>
-      </a>
-    </div>`
-    const divDropdown = document.getElementsByClassName('dataTable-dropdown')
-    divDropdown[0].insertBefore(divTrash, divDropdown.lastElementChild)
+//EVENTO CLICK FILTROS
+const dataTableSorter = document.getElementsByClassName('dataTable-sorter')
+for (let i = 0; i < dataTableSorter.length; i++) {
+  dataTableSorter[i].addEventListener("click", async() => {
 
-  }
+    //esperar a que se ejecute el evento click
+    await new Promise(resolve => setTimeout(resolve, 10));
 
-  //PARA AGREGAR EL CHECK DE SELECCIONAR TODOS LOS ELEMENTOS
-  if (document.getElementById("hilo-list")) {
-    //agregar th con check para seleccionar todos los elementos
-    const thCheck = document.createElement("th")
-    thCheck.style.opacity = "1"
-    thCheck.style.fontSize = "0.8rem"
-
-    thCheck.innerHTML = `<div class="form-check my-auto">
-    <input class="form-check-input" type="checkbox" id="checkAll">
-    </div>`
-    const tr = document.querySelector("#hilo-list thead tr")
-    tr.insertBefore(thCheck, tr.firstElementChild)
-  }
-
-  //PARA SELECCIONAR TODOS LOS CHECKBOX CUNADO SE HACE CLICK EN EL CHECKBOX PRINCIPAL
-  const checkAll = document.getElementById("checkAll")
-  checkAll.addEventListener("change", (e) => {
-    if (e.target.checked) {
-      elementCheck.forEach((item) => {
+    await document.querySelectorAll("[title='elementCheck']").forEach((item) => {
+      //si el elemento del array coincide con el id del checkbox, marcar el checkbox
+      if (itemsCheck.includes(item.value)) {
         item.checked = true
-        itemsCheck.push(item.value)
-      })
-    } else {
-      elementCheck.forEach((item) => {
+      } else {
         item.checked = false
-        itemsCheck.splice(itemsCheck.indexOf(item.value), 1)
-      })
+      }
+    })
+    eventCustomCheck()
+  })
+}
+
+//PARA ELIMINAR LOS ELEMENTOS SELECCIONADOS 
+async function  deleteItemsCheck() {
+  var elementCheck = document.querySelectorAll("[title='elementCheck']")
+  //limpiar el array
+  itemsCheck.splice(0, itemsCheck.length)
+  //agregar los elementos seleccionados al array
+  await elementCheck.forEach((item) => {
+    if (item.checked) {
+      itemsCheck.push(item.value)
     }
   })
-  
-  //PARA ELIMINAR LOS ELEMENTOS SELECCIONADOS 
-  async function  deleteItemsCheck() {
-    if (itemsCheck.length > 0) {
-      await argon.showSwal('warning-message-and-cancel')
-      const btnDeleteYes = document.querySelector(".swal2-confirm")
-      btnDeleteYes.addEventListener("click", () => {
-        //lapse time execute function
-        setTimeout(() => {
-          window.location.href = `/material/hilo/${itemsCheck}/delete`
-        }, 1000)
-      })
-    } else {
-      //alert seleccionar mas de un elemento
-      window.alert("Selecciona al menos un elemento")
-    }
-  }
-  
 
-  {{#each hilo}}
+  //si el array tiene elementos
+  if (itemsCheck.length > 0) {
+    await argon.showSwal('warning-message-and-cancel')
+    const btnDeleteYes = document.querySelector(".swal2-confirm")
+
+    const swalContainer = document.querySelector(".swal2-html-container")
+    swalContainer.innerHTML = `Hay ${itemsCheck.length} seleccionados, para eliminar.`
+
+    btnDeleteYes.addEventListener("click", () => {
+      //lapse time execute function
+      setTimeout(() => {
+        window.location.href = `/material/hilo/${itemsCheck}/delete`
+      }, 1000)
+    })
+  } 
+  else {
+    //alert seleccionar mas de un elemento
+    window.alert("Selecciona al menos un elemento")
+  } 
+}
+
+
+{{#each hilos}}
   const btnDelete{{_id}}= document.getElementById('trashElement{{_id}}');
 
   btnDelete{{_id}}.addEventListener('click', () => {
@@ -315,9 +349,9 @@
     btnDeleteYes.addEventListener("click",()=>{
       //lapse time execute function
       setTimeout(()=>{
-        window.location.href="/material/hilo/{{_id}}/delete"
+        window.location.href=`/material/hilo/{{_id}}/delete`
       },1000)
   })
   })
-  {{/each}}
+{{/each}}
 </script>

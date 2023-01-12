@@ -96,6 +96,7 @@
                 <tr>
                   <th>Código</th>
                   <th>Nombre</th>
+                  <th>Proveedores</th>
                   <th>Acción</th>
                 </tr>
               </thead>
@@ -105,7 +106,7 @@
                     <td class="text-sm">
                       <div class="d-flex">
                         <div class="form-check my-auto">
-                          <input class="form-check-input" type="checkbox" title="elementCheck" value="{{_id}}">
+                          <input class="form-check-input" type="checkbox" title="elementCheck" value="{{_id}}" id="customCheck{{@index}}">
                         </div>
                       </div>
                     </td>
@@ -115,6 +116,7 @@
                       </div>
                     </td>
                     <td class="text-sm">{{name}}</td>
+                    <td class="text-sm">{{#each proveedor}} <p>{{nroId}} - {{name}}</p> {{/each}}</td>
                     <td class="text-sm">
                       <a
                         href="/material/hilo/categoria/{{_id}}/edit"
@@ -141,6 +143,7 @@
                 <tr>
                   <th>Código</th>
                   <th>Descripción</th>
+                  <th>Proveedores</th>
                   <th>Acción</th>
                 </tr>
               </tfoot>
@@ -255,6 +258,8 @@
     if (itemsCheck.length > 0) {
       await argon.showSwal('warning-message-and-cancel')
       const btnDeleteYes = document.querySelector(".swal2-confirm")
+      const swalContainer = document.querySelector(".swal2-html-container")
+      swalContainer.innerHTML = `Hay ${itemsCheck.length} seleccionados, para eliminar.`
       btnDeleteYes.addEventListener("click", () => {
         //lapse time execute function
         setTimeout(() => {

@@ -34,27 +34,37 @@
                   </div>
                   <div class="col-sm-6">
                     <label>Nombre</label>
-                    <input
-                      class="multisteps-form__input form-control"
-                      type="text"
-                      name="name"
-                      placeholder="Hilo Piramide #40 Blanco"
-                      value="{{name}}"
-                    />
+                      <div class="form-group">
+                        <div class="input-group">
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="name"
+                            id="name"
+                            placeholder="Hilo Piramide #40 Blanco"
+                            value="{{name}}"
+                          />
+                          <span class="input-group-text"><i class="ni ni-air-baloon cursor-pointer" onclick="return updateName()"></i></span>
+                        </div>
+                      </div>
                   </div>
                 </div>
                 
                 <div class="row mt-3">
                   <div class="col-sm-12">
                     <label>Descripción</label>
-                    <input
-                      class="multisteps-form__input form-control"
-                      type="text"
-                      name="description"
-                      placeholder=" "
-                      value="{{description}}"
-                      readonly  
-                    />
+                    <div class="form-group">
+                      <div class="input-group">
+                        <textarea
+                          class="multisteps-form__input form-control"
+                          type="text"
+                          name="description"
+                          id="description"
+                          value="{{description}}"
+                        ></textarea>
+                        <span class="input-group-text"><i class="ni ni-air-baloon cursor-pointer" onclick="return updateDescription()"></i></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -97,6 +107,7 @@
                       class="multisteps-form__input form-control"
                       type="text"
                       name="marca"
+                      id="marca"
                       placeholder="Piramide"
                       value="{{marca}}"
                     />
@@ -127,6 +138,7 @@
                       class="multisteps-form__input form-control"
                       type="text"
                       name="grosor"
+                      id="grosor"
                       placeholder="#40"
                       value="{{grosor}}"
                     />
@@ -158,6 +170,7 @@
                       type="number"
                       name="minQuantity"
                       placeholder="6"
+                      id="minQuantity"
                       value="{{minQuantity}}"
                     />
                   </div>
@@ -170,6 +183,7 @@
                       type="number"
                       name="priceRef"
                       placeholder="12"
+                      id="priceRef"
                       value="{{priceRef}}"
                     />
                     </div>
@@ -216,13 +230,6 @@
 <script src="/assets/js/plugins/dropzone.min.js"></script>
 
 <script>
-  //Actualizar el valor de la descripción
-  //El nombre se compone por 'Hilo' + marca + el grosor + el color
-  //La descripcion se compone por 'Hilo' + marca + el grosor + el color + 'de' + la categoria + 'de' + la unidad de medida + 'con cantidad minima de ' + la cantidad minima + 'y precio de referencia de' + el precio de referencia
-
-</script>
-
-<script>
   //Cambia el color del background de los choice list
   if (document.querySelectorAll(".choices__list--dropdown")){
       document.querySelectorAll(".choices__list--dropdown").forEach(e=>e.className+= " bg-white text-color-black" )
@@ -251,5 +258,51 @@
       dictDefaultMessage: "Arrastra la imagen aquí",   
     });
     
+
+</script>
+
+<script>
+
+  const name = document.getElementById("name");
+  const description = document.getElementById("description");
+  const marca = document.getElementById("marca");
+  const grosor = document.getElementById("grosor");
+  const color = document.getElementById("choices-color");
+  const category = document.getElementById("choices-categories");
+  const unit = document.getElementById("choices-unidad-medida");
+  const minQuantity = document.getElementById("minQuantity");
+  const priceRef = document.getElementById("priceRef");
+
+  function updateName (){
+    //El nombre se compone por 'Hilo' + marca + el grosor + el nombre de la opcion de color
+    var textGrosor = grosor.value
+    var textMarca = marca.value
+    if (color.value == '') {var textColor = ''} else {var textColor = color.options[color.selectedIndex].text}
+    name.value = `Hilo ${textMarca} ${textGrosor} ${textColor}`
+  }
+
+  function updateDescription() {
+    //La descripcion se compone por 'Hilo' + marca + el grosor + el color + 'de' + la categoria + 'de' + la unidad de medida + 'con cantidad minima de ' + la cantidad minima + 'y precio de referencia de' + el precio de referencia
+    var textGrosor = grosor.value
+    var textMarca = marca.value
+    var textMinQuantity = minQuantity.value
+    var textPriceRef = priceRef.value
+    if (color.value == '') {var textColor = ''} else {var textColor = color.options[color.selectedIndex].text}
+    if (category.value == '') {var textCategory = ''} else {var textCategory = category.options[category.selectedIndex].text}
+    if (unit.value == '') {var textUnit = ''} else {var textUnit = unit.options[unit.selectedIndex].text}
+  
+
+    description.value = `Hilo ${textMarca} ${textGrosor} ${textColor} de ${textCategory}, medido por ${textUnit} con cantidad mínima de ${textMinQuantity} y precio de referencia de S/ ${textPriceRef}`
+
+  }
+
+  //marca.oninput = function() { updateName(); updateDescription(); };
+  //grosor.oninput = function() { updateName(); updateDescription(); };
+  //color.addEventListener("change", () => {updateName(); updateDescription();});
+  //category.addEventListener("change", () => {updateDescription()});
+  //unit.addEventListener("change", () => {updateDescription()});
+  //minQuantity.oninput = function() { updateDescription() };
+  //priceRef.oninput = function() { updateDescription() };
+  
 
 </script>

@@ -1,0 +1,324 @@
+<div class="row">
+  <div class="col-12">
+    
+    {{> buttonBack}}
+
+    <div class="multisteps-form">
+      <!--form panels-->
+      <div class="row">
+        <div class="col-12 col-lg-8 m-auto">
+          <form action="/material/hilo/{{hilo._id}}/edit" method="POST" class="multisteps-form__form mb-8">
+            <!--single form panel-->
+            <div
+              class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active"
+              data-animation="FadeIn"
+            >
+            <div class="card mt-4">
+              <div class="card-header">
+                <h5 class="font-weight-bolder">Agregar Hilo</h5>
+              </div>
+
+              <div class="card-body pt-0">
+
+                <div class="row mt-3">
+                  <div class="col-sm-6">
+                    <label>SKU</label>
+                    <input
+                      class="multisteps-form__input form-control"
+                      type="text"
+                      name="sku"
+                      placeholder="H-001"
+                      value="{{hilo.sku}}"
+                      autofocus
+                    />
+                  </div>
+                  <div class="col-sm-6">
+                    <label>Nombre</label>
+                      <div class="form-group">
+                        <div class="input-group">
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="name"
+                            id="name"
+                            placeholder="Hilo Piramide #40 Blanco"
+                            value="{{hilo.name}}"
+                          />
+                          <span class="input-group-text"><i class="ni ni-air-baloon cursor-pointer" onclick="return updateName()"></i></span>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+                
+                <div class="row mt-3">
+                  <div class="col-sm-12">
+                    <label>Descripción</label>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <textarea
+                          class="multisteps-form__input form-control"
+                          type="text"
+                          name="description"
+                          id="description"
+                        >{{hilo.description}}</textarea>
+                        <span class="input-group-text"><i class="ni ni-air-baloon cursor-pointer" onclick="return updateDescription()"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card mt-4">
+              <div class="card-header">
+                <h5 class="font-weight-bolder">Características</h5>
+              </div>
+              <div class="card-body pt-0">
+                <div class="row mt-3">
+                  <div class="col-sm-5">
+                    <label>Color</label>
+                    <div class="content-select">
+                        <select class="my-select-menu form-control"
+                        id="choices-color"
+                        name="color"
+                        >
+                          <option value="" disabled selected hidden>Seleccionar ...</option>
+                          
+                          {{#each colors}}
+                            <option value="{{this._id}}" codeColor="{{this.codeColor}}">{{this.name}}</option>
+                          {{/each}}
+                          
+                        </select>
+                        <i></i>
+                    </div>
+                  </div>
+                  <div class="col-sm-1">
+                    <label>Color</label>
+                    <div class="form-control" id="form-color-view" style="background-color: {{hilo.color.codeColor}}">
+                      <div class="fixed-plugin text-center">
+                        <span class="filter badge">
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <label>Marca</label>
+                    <input
+                      class="multisteps-form__input form-control"
+                      type="text"
+                      name="marca"
+                      id="marca"
+                      placeholder="Piramide"
+                      value="{{hilo.marca}}"
+                    />
+                  </div>
+                </div>
+
+                <div class="row mt-3">
+                  <div class="col-sm-6 text-color-black">
+                    <label>Categorías</label>
+                    <div class="content-select">
+                        <select class="my-select-menu form-control"
+                        id="choices-categories"
+                        name="category"
+                        >
+                          <option value="" disabled selected hidden>Seleccionar ...</option>
+                          
+                          {{#each categories}}
+                            <option value="{{this._id}}">{{this.code}} - {{this.name}}</option>
+                          {{/each}}
+                          
+                        </select>
+                        <i></i>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <label>Grosor</label>
+                    <input
+                      class="multisteps-form__input form-control"
+                      type="text"
+                      name="grosor"
+                      id="grosor"
+                      placeholder="#40"
+                      value="{{hilo.grosor}}"
+                    />
+                  </div>
+                </div>
+
+                <div class="row mt-3">
+                  <div class="col-sm-4 text-color-black">
+                    <label>Unidad de Medida</label>
+                    <div class="content-select">
+                        <select class="my-select-menu form-control"
+                        id="choices-unidad-medida"
+                        name="unit"
+                        >
+                          <option value="" disabled selected hidden>Seleccionar ...</option>
+
+                          {{#each units}}
+                            <option value="{{this._id}}">{{this.name}} ( {{this.code}} )</option>
+                          {{/each}}
+
+                        </select>
+                        <i></i>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <label>Cant. minima</label>
+                    <input
+                      class="multisteps-form__input form-control"
+                      type="number"
+                      name="minQuantity"
+                      id="minQuantity"
+                      placeholder="6"
+                      value="{{hilo.minQuantity}}"
+                    />
+                  </div>
+                  <div class="col-sm-4">
+                    <label>Precio Ref.</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="price">S/</span>
+                    <input
+                      class="multisteps-form__input form-control"
+                      type="number"
+                      name="priceRef"
+                      id="priceRef"
+                      placeholder="12"
+                      value="{{hilo.priceRef}}"
+                    />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card mt-4">
+              <div class="card-header">
+                <h5 class="font-weight-bolder">Imagen del material</h5>
+              </div>
+
+              <div class="card-body pt-0">
+                <div class="row mt-3">
+                  <div class="col-sm-12">
+                    <div action="/file-upload" class="form-control dropzone" id="dropzone">
+                      <div class="fallback">
+                        <input name="file" type="file"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="button-row d-flex mt-4">
+              <button
+                class="btn bg-gradient-primary ms-auto mb-0"
+                type="submit"
+                title="Send"
+              >Guardar</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="/assets/js/plugins/multistep-form.js"></script>
+<script src="/assets/js/plugins/dropzone.min.js"></script>
+<script>
+  //Cambia el color del background de los choice list
+  if (document.querySelectorAll(".choices__list--dropdown")){
+      document.querySelectorAll(".choices__list--dropdown").forEach(e=>e.className+= " bg-white text-color-black" )
+  }
+  //Cambia el color del buscador de choice list
+  if (document.querySelectorAll(".choices__input--cloned")){
+      document.querySelectorAll(".choices__input--cloned").forEach(e=>e.className+= " text-color-black" )
+  }
+  //cambiar el background color de form-color-view con el valor del choice color
+  if (document.querySelectorAll("#choices-color")){
+      document.querySelectorAll("#choices-color").forEach(e=>e.addEventListener("change", function(){
+        document.querySelector("#form-color-view").style.backgroundColor = this.options[this.selectedIndex].getAttribute("codeColor")
+      }))
+  }
+
+  //Upload de imagenes  
+    Dropzone.autoDiscover = false;
+    var drop = document.getElementById("dropzone");
+    var myDropzone = new Dropzone(drop, {
+        url: "/file/post",
+        addRemoveLinks: true,
+        maxFiles: 1,
+        maxFilesize: 2,
+        //text to show when the file is dropped
+        dictDefaultMessage: "Arrastra la imagen aquí",   
+    });
+    
+
+  //AGREGAR DATOS A FORMULARIO
+  function getDataForm () {     
+    {{#if hilo.color}}
+    const hiloColorId = "{{hilo.color._id}}"
+    {{/if}}
+    {{#if hilo.category}}
+    const hiloCategoryId = "{{hilo.category._id}}"
+    {{/if}}
+    {{#if hilo.unit}}
+    const hiloUnitId = "{{hilo.unit._id}}"
+    {{/if}}
+
+    if (hiloColorId){
+        const selectColor = document.getElementById('choices-color');
+        //seleccionar el color que tiene el mismo codeColor en selectColor
+        selectColor.value = hiloColorId;
+    }
+
+    if (hiloCategoryId){
+        const selectCategory = document.getElementById('choices-categories');
+        //seleccionar la categoría que tiene el mismo code en selectCategory
+        selectCategory.value = hiloCategoryId;
+    }
+
+    if (hiloUnitId){
+        const selectUnit = document.getElementById('choices-unidad-medida');
+        //seleccionar la unidad de medida que tiene el mismo code en selectUnit
+        selectUnit.value = hiloUnitId
+    }
+  }
+  getDataForm()
+  
+  const name = document.getElementById("name");
+  const description = document.getElementById("description");
+  const marca = document.getElementById("marca");
+  const grosor = document.getElementById("grosor");
+  const color = document.getElementById("choices-color");
+  const category = document.getElementById("choices-categories");
+  const unit = document.getElementById("choices-unidad-medida");
+  const minQuantity = document.getElementById("minQuantity");
+  const priceRef = document.getElementById("priceRef");
+
+  function updateName (){
+    //El nombre se compone por 'Hilo' + marca + el grosor + el nombre de la opcion de color
+    var textGrosor = grosor.value
+    var textMarca = marca.value
+    if (color.value == '') {var textColor = ''} else {var textColor = color.options[color.selectedIndex].text}
+    name.value = `Hilo ${textMarca} ${textGrosor} ${textColor}`
+  }
+
+  function updateDescription() {
+    //La descripcion se compone por 'Hilo' + marca + el grosor + el color + 'de' + la categoria + 'de' + la unidad de medida + 'con cantidad minima de ' + la cantidad minima + 'y precio de referencia de' + el precio de referencia
+    var textGrosor = grosor.value
+    var textMarca = marca.value
+    var textMinQuantity = minQuantity.value
+    var textPriceRef = priceRef.value
+    if (color.value == '') {var textColor = ''} else {var textColor = color.options[color.selectedIndex].text}
+    if (category.value == '') {var textCategory = ''} else {var textCategory = category.options[category.selectedIndex].text}
+    if (unit.value == '') {var textUnit = ''} else {var textUnit = unit.options[unit.selectedIndex].text}
+  
+
+    description.value = `Hilo ${textMarca} ${textGrosor} ${textColor} de ${textCategory}, medido por ${textUnit} con cantidad mínima de ${textMinQuantity} y precio de referencia de S/ ${textPriceRef}`
+
+  }
+
+</script>

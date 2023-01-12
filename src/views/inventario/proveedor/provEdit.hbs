@@ -944,70 +944,84 @@
 
 {{!-- Para agregar los datos del usuario a la interfaz --}}
 <script>
-    const emailArr =  []
+const emailArr =  []
 
-    {{#each proveedor.email}}
-    emailArr.push('{{this}}')
-    {{/each}}
+{{#each proveedor.email}}
+emailArr.push('{{this}}')
+{{/each}}
 
-    if (emailArr.length>0){
-        emailArr.forEach( async (e) =>{
-            emailInput.value = e;
-            await addEmail();
-            emailInput.value = '';
-        })
-    }
+if (emailArr.length>0){
+    emailArr.forEach( async (e) =>{
+        emailInput.value = e;
+        await addEmail();
+        emailInput.value = '';
+    })
+}
 
-    const numberPhoneArr =  []
+const numberPhoneArr =  []
 
-    {{#each proveedor.numberPhone}}
-    var objPhones = {
-        code:"{{this.code}}",
-        phone:"{{this.phone}}"
-    }
-    numberPhoneArr.push(objPhones)
-    {{/each}}
+{{#each proveedor.numberPhone}}
+var objPhones = {
+    code:"{{this.code}}",
+    phone:"{{this.phone}}"
+}
+numberPhoneArr.push(objPhones)
+{{/each}}
 
-    if (numberPhoneArr.length>0){
+if (numberPhoneArr.length>0){
 
-        const code = document.getElementById('choices-codePhone');
+    const code = document.getElementById('choices-codePhone');
 
-        numberPhoneArr.forEach( async (e) =>{
-            code.options[code.selectedIndex].text = e.code;
-            phoneInput.value = e.phone;
-            await addPhone(e.code);
-            phoneInput.value = '';
-        })
-    }
+    numberPhoneArr.forEach( async (e) =>{
+        code.options[code.selectedIndex].text = e.code;
+        phoneInput.value = e.phone;
+        await addPhone(e.code);
+        phoneInput.value = '';
+    })
+}
 
-    const addressArr =  []
+const addressArr =  []
 
-    {{#each proveedor.address}}
-    var objAddress = {
-        departamento:"{{this.departamento}}",
-        provincia:"{{this.provincia}}",
-        distrito:"{{this.distrito}}",
-        address:"{{this.address}}",
-        reference:"{{this.reference}}"
-    }
+{{#each proveedor.address}}
+var objAddress = {
+    departamento:"{{this.departamento}}",
+    provincia:"{{this.provincia}}",
+    distrito:"{{this.distrito}}",
+    address:"{{this.address}}",
+    reference:"{{this.reference}}"
+}
 
-    addressArr.push(objAddress)
-    {{/each}}
+addressArr.push(objAddress)
+{{/each}}
 
-    if (addressArr.length>0){
-        addressArr.forEach( async (e) =>{
-            dep.options[dep.selectedIndex].text = e.departamento;
-            prov.options[prov.selectedIndex].text = e.provincia;
-            dist.options[dist.selectedIndex].text = e.distrito;
-            addressInput.value = e.address;
-            referenceInput.value = e.reference;
-            await addAddress();
-            dep.value = '';
-            prov.value = '';
-            dist.value = '';
-            addressInput.value = '';
-            referenceInput.value = '';
-        })
-    }
+if (addressArr.length>0){
+    addressArr.forEach( async (e) =>{
+        dep.options[dep.selectedIndex].text = e.departamento;
+        prov.options[prov.selectedIndex].text = e.provincia;
+        dist.options[dist.selectedIndex].text = e.distrito;
+        addressInput.value = e.address;
+        referenceInput.value = e.reference;
+        await addAddress();
+        dep.value = '';
+        prov.value = '';
+        dist.value = '';
+        addressInput.value = '';
+        referenceInput.value = '';
+    })
+}
+
+</script>
+
+<script>
+    
+const provTypeId = "{{proveedor.typeId}}"
+if (provTypeId){
+    //Para agregar los datos del tipo de identificación al interfaz
+    const selectTypeId = document.getElementById('choices-typeId');
+    //seleccionar el tipo de identificación del proveedor con value = provTypeId
+    selectTypeId.options[selectTypeId.selectedIndex].text = provTypeId;
+    selectTypeId.value = provTypeId;
+}
+
 
 </script>
