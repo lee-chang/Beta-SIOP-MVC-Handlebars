@@ -199,9 +199,10 @@
               <div class="card-body pt-0">
                 <div class="row mt-3">
                   <div class="col-sm-12">
-                    <div action="/file-upload" class="form-control dropzone" id="dropzone">
+                    <div class="form-control dropzone" id="image-dropzone">
                       <div class="fallback">
-                        <input name="file" type="file"/>
+                        {{!-- input image jps png  --}}
+                        <input name="image" type="file"/>
                       </div>
                     </div>
                   </div>
@@ -245,7 +246,7 @@
 
   //Upload de imagenes  
     Dropzone.autoDiscover = false;
-    var drop = document.getElementById("dropzone");
+    var drop = document.getElementById("image-dropzone");
     var myDropzone = new Dropzone(drop, {
         url: "/file/post",
         addRemoveLinks: true,

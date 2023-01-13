@@ -4,14 +4,57 @@ import UnitMedida from "../../models/unit.js";
 import Colors from "../../models/colors.js";
 import Proveedores from "../../models/proveedor.js";
 
+import path from "path";
+import multer from "multer";
+import { v4 as uuid } from "uuid";
+
 const indices = [
-    {
-      activeMateriales: 1,
-      indice1: "Materiales",
-      indice2: "Material",
-      indice3: "Hilo",
-    },
-  ];
+  {
+    activeMateriales: 1,
+    indice1: "Materiales",
+    indice2: "Material",
+    indice3: "Hilo",
+  },
+];
+
+//define __dirname
+const __dirname = path.resolve();
+
+const storage = multer.diskStorage({
+  destination: path.join(__dirname, '../../public/uploads/materiales'),
+  filename:  (req, file, cb) => {
+      cb(null, uuid()+path.extname(file.originalname));
+  }
+})
+const uploadImage = multer({
+  storage,
+  limits: {fileSize: 2000000},
+  fileFilter: (req, file, cb) => {
+      const filetypes = /jpeg|jpg|png/;
+      const mimetype = filetypes.test(file.mimetype);
+      const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+      if (mimetype && extname) {
+          return cb(null, true);
+      }
+      cb("Error: Archivo debe ser una imagen valida");
+  }
+}).single('image');
+
+
+const uploadImageHilo =  async (req, res, next) => {
+  uploadImage(req, res, (err) => {
+    //considerar que no es necesario que se suba una imagen
+    if (err) {
+      //agregar un mensaje de error en una variable para recuperar en el siguiente controlador desde el body
+      req.body.err = err;
+    } 
+
+    console.log(req.file);
+    console.log(req.body);
+
+    next();
+  })
+}
 
 export const HiloTable = async (req, res) => {
   const hilos = await Hilos.find().populate('color').populate('category').populate('unit').lean();
@@ -44,7 +87,11 @@ export const HiloAdd = async (req, res) => {
 }
 
 export const HiloAddPost = async (req, res) => {
-  const { sku, name, description, color, marca, category, grosor, unit, minQuantity, priceRef } = req.body;
+  const { sku, name, description, color, marca, category, grosor, unit, minQuantity, priceRef, err } = req.body;
+
+  const categories = await CategoryHilos.find().lean();
+  const units = await UnitMedida.find().lean();
+  const colors = await Colors .find().lean();
 
   const errors = [];
   if (!sku) {
@@ -103,6 +150,15 @@ export const HiloAddPost = async (req, res) => {
     });
   }
 
+  //Error de imagen
+  if (err) {
+    errors.push({
+      title: "No se registro el hilo",
+      description: err,
+      time: "Ahora",
+    });
+  }
+
   if (errors.length > 0) {
     res.render("material/hilo/hiloForm", {
       errors,
@@ -111,7 +167,10 @@ export const HiloAddPost = async (req, res) => {
       indice1: indices[0].indice1,
       indice2: indices[0].indice2,
       indice3: indices[0].indice3,
-      sku, name, description, color, marca, category, grosor, unit, minQuantity, priceRef
+      sku, name, description, color, marca, category, grosor, unit, minQuantity, priceRef,
+      categories,
+      units,
+      colors
     });
   }
   else {
@@ -131,6 +190,7 @@ export const HiloAddPost = async (req, res) => {
     res.redirect("/material/hilo");
   }
 }
+
 
 export const HiloEdit = async (req, res) => {
   const { id } = req.params;

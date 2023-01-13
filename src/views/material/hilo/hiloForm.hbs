@@ -7,7 +7,7 @@
       <!--form panels-->
       <div class="row">
         <div class="col-12 col-lg-8 m-auto">
-          <form action="/material/hilo/add" method="POST" class="multisteps-form__form mb-8">
+          <form action="/material/hilo/add" method="POST" class="multisteps-form__form mb-8" enctype="multipart/form-data">
             <!--single form panel-->
             <div
               class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active"
@@ -200,9 +200,9 @@
               <div class="card-body pt-0">
                 <div class="row mt-3">
                   <div class="col-sm-12">
-                    <div action="/file-upload" class="form-control dropzone" id="dropzone">
+                    <div class="form-control dropzone" id="materialImg">
                       <div class="fallback">
-                        <input name="file" type="file"/>
+                        <input name="image" type="file" multiple />
                       </div>
                     </div>
                   </div>
@@ -246,18 +246,19 @@
   }
 
   //Upload de imagenes
-  
-    Dropzone.autoDiscover = false;
-    var drop = document.getElementById("dropzone");
-    var myDropzone = new Dropzone(drop, {
-      url: "/file/post",
-      addRemoveLinks: true,
-      maxFiles: 1,
-      maxFilesize: 2,
-      //text to show when the file is dropped
-      dictDefaultMessage: "Arrastra la imagen aquí",   
-    });
-    
+  Dropzone.autoDiscover = false;
+  var drop = document.getElementById("materialImg");
+  var myDropzone = new Dropzone(drop, {
+    url: "/material/hilo/add",
+    addRemoveLinks: true,
+    maxFiles: 1,
+    maxFilesize: 2,
+    uploadMultiple: false,
+    clickable: true,
+    acceptedFiles: '.png,.jpg,.jpeg',
+    dictDefaultMessage: "Arrastra la imagen aquí",   
+  });
+
 
 </script>
 
