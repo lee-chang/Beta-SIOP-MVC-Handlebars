@@ -7,7 +7,7 @@
       <!--form panels-->
       <div class="row">
         <div class="col-12 col-lg-8 m-auto">
-          <form action="/material/hilo/add" method="POST" class="multisteps-form__form mb-8" enctype="multipart/form-data">
+          <form  {{!--action="/material/hilo/add" method="POST"--}} class="multisteps-form__form mb-8" id="form-material"> 
             <!--single form panel-->
             <div
               class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active"
@@ -28,7 +28,8 @@
                       type="text"
                       name="sku"
                       placeholder="H-001"
-                      value="{{code}}"
+                      value="{{sku}}"
+                      id="sku"
                       autofocus
                     />
                   </div>
@@ -274,6 +275,9 @@
   const minQuantity = document.getElementById("minQuantity");
   const priceRef = document.getElementById("priceRef");
 
+  //seleccionar el input type= file
+  const image = document.querySelector('input[type="file"]');
+
   function updateName (){
     //El nombre se compone por 'Hilo' + marca + el grosor + el nombre de la opcion de color
     var textGrosor = grosor.value
@@ -297,13 +301,36 @@
 
   }
 
-  //marca.oninput = function() { updateName(); updateDescription(); };
-  //grosor.oninput = function() { updateName(); updateDescription(); };
-  //color.addEventListener("change", () => {updateName(); updateDescription();});
-  //category.addEventListener("change", () => {updateDescription()});
-  //unit.addEventListener("change", () => {updateDescription()});
-  //minQuantity.oninput = function() { updateDescription() };
-  //priceRef.oninput = function() { updateDescription() };
+  const form = document.getElementById("form-material");
+  form.addEventListener("submit", submitForm);
   
+  const formData = new FormData();
+
+
+
+  async function submitForm (e) {
+    await e.preventDefault();
+    formData.append("name", name.value);
+    formData.append("description", description.value);
+    formData.append("marca", marca.value);
+    formData.append("grosor", grosor.value);
+    formData.append("color", color.value);
+    formData.append("category", category.value);
+    formData.append("unit", unit.value);
+    formData.append("minQuantity", minQuantity.value);
+    formData.append("priceRef", priceRef.value);
+    formData.append("image", image.files[0]);
+    
+    const response = await fetch("/material/hilo/add", {
+      method: "POST",
+      body: formData,
+      headers: {
+          "Content-Type": "multipart/form-data"
+        }
+    })        
+      .then((res) => console.log(res))
+      .catch((err) => ("Error occured", err));
+  }
+
 
 </script>

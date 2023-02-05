@@ -2,19 +2,17 @@ import express from "express";
 import session from "express-session";
 import {create} from "express-handlebars";
 import path from "path";
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+
 import passport from "passport";
 import bodyParser from "body-parser";
 
-import indexRoutes from "./routes/index.routes.js";
-import inventarioRoutes from "./routes/inventario.routes.js";
-import reportesRoutes from "./routes/reportes.routes.js";
-import usersRoutes from "./routes/users.routes.js";
-import materialRoutes from "./routes/material.routes.js";
-import "./config/database.js"
-import "./config/passport.js"
+import indexRoutes from "./routes/index.routes";
+import inventarioRoutes from "./routes/inventario.routes";
+import reportesRoutes from "./routes/reportes.routes";
+import usersRoutes from "./routes/users.routes";
+import materialRoutes from "./routes/material.routes";
+import "./config/database"
+import "./config/passport"
 //INITIALIZATIONS
 const app = express();
 
