@@ -3,7 +3,7 @@
   "installCommand": "npm install",
   "buildCommand": "npm run build",
   "alias": ["SIOP-LeeChang"],
-  "builds": [{ "src": "src/app.js", "use": "@vercel/node" }],
+  "builds": [{ "src": "dest/app.js", "use": "@vercel/node" }],
   "routes": [
     {
       "headers": {
@@ -12,7 +12,7 @@
         "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
       }, 
       "src": "/(.*)",
-      "dest": "src/app.js"
+      "dest": "dest/app.js"
     }
   ]
 }
