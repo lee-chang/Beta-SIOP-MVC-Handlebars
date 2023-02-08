@@ -1,14 +1,11 @@
 {
-  "version": 2,
-  "installCommand": "npm install",
-  "buildCommand": "npm run build",
-  "alias": ["SIOP-LeeChang"],
-  "builds": [{ "src": "/dest/app.js", "use": "@vercel/node" }],
-  "routes": [
-    {
-
-      "src": "/dest/(.*)",
-      "dest": "/dest/app.js"
-    }
-  ]
+   "version": 2,
+   "installCommand": "npm install",
+   "buildCommand": "npm run build",
+   "builds": [
+       { "src": "src/app.js", "use": "@vercel/node" }
+    ],
+    "routes": [
+       { "src": "/(.*)", "dest": "src/app.js" }
+    ]
 }
