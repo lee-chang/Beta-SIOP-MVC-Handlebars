@@ -7,7 +7,7 @@
       <!--form panels-->
       <div class="row">
         <div class="col-12 col-lg-8 m-auto">
-          <form  {{!--action="/material/hilo/add" method="POST"--}} class="multisteps-form__form mb-8" id="form-material"> 
+          <form action="/material/hilo/add" method="POST" class="multisteps-form__form mb-8" id="form-material"> 
             <!--single form panel-->
             <div
               class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active"
@@ -247,6 +247,7 @@
   }
 
   //Upload de imagenes
+  /*
   Dropzone.autoDiscover = false;
   var drop = document.getElementById("materialImg");
   var myDropzone = new Dropzone(drop, {
@@ -259,7 +260,7 @@
     acceptedFiles: '.png,.jpg,.jpeg',
     dictDefaultMessage: "Arrastra la imagen aquí",   
   });
-
+  */
 
 </script>
 
@@ -301,6 +302,8 @@
 
   }
 
+
+  /*
   const form = document.getElementById("form-material");
   form.addEventListener("submit", submitForm);
   
@@ -331,6 +334,6 @@
       .then((res) => console.log(res))
       .catch((err) => ("Error occured", err));
   }
-
+  */
 
 </script>

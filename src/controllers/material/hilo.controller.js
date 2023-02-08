@@ -4,25 +4,21 @@ import UnitMedida from "../../models/unit.js";
 import Colors from "../../models/colors.js";
 import Proveedores from "../../models/proveedor.js";
 
-import { v4 as uuid } from "uuid";
-
-const indices = [
-  {
-    activeMateriales: 1,
-    indice1: "Materiales",
-    indice2: "Material",
-    indice3: "Hilo",
-  },
-];
+const indices = {
+  activeMateriales: 1,
+  indice1: "Materiales",
+  indice2: "Material",
+  indice3: "Hilo",
+}
 
 export const HiloTable = async (req, res) => {
   const hilos = await Hilos.find().populate('color').populate('category').populate('unit').lean();
   res.render("material/hilo/hiloTable", {
       username: res.locals.user.username,
-      activeMateriales: indices[0].activeMateriales,
-      indice1: indices[0].indice1,
-      indice2: indices[0].indice2,
-      indice3: indices[0].indice3,
+      activeMateriales: indices.activeMateriales,
+      indice1: indices.indice1,
+      indice2: indices.indice2,
+      indice3: indices.indice3,
       hilos
     });
 }
@@ -35,10 +31,10 @@ export const HiloAdd = async (req, res) => {
 
   res.render("material/hilo/hiloForm", {
       username: res.locals.user.username,
-      activeMateriales: indices[0].activeMateriales,
-      indice1: indices[0].indice1,
-      indice2: indices[0].indice2,
-      indice3: indices[0].indice3,
+      activeMateriales: indices.activeMateriales,
+      indice1: indices.indice1,
+      indice2: indices.indice2,
+      indice3: indices.indice3,
       categories,
       units,
       colors
@@ -47,7 +43,7 @@ export const HiloAdd = async (req, res) => {
 
 export const HiloAddPost = async (req, res) => {
   const { sku, name, description, color, marca, category, grosor, unit, minQuantity, priceRef, err } = req.body;
-
+  console.log(err);
   const categories = await CategoryHilos.find().lean();
   const units = await UnitMedida.find().lean();
   const colors = await Colors .find().lean();
@@ -109,14 +105,14 @@ export const HiloAddPost = async (req, res) => {
     });
   }
 
-    if (errors.length > 0) {
+  if (errors.length > 0) {
     res.render("material/hilo/hiloForm", {
       errors,
       username: res.locals.user.username,
-      activeMateriales: indices[0].activeMateriales,
-      indice1: indices[0].indice1,
-      indice2: indices[0].indice2,
-      indice3: indices[0].indice3,
+      activeMateriales: indices.activeMateriales,
+      indice1: indices.indice1,
+      indice2: indices.indice2,
+      indice3: indices.indice3,
       sku, name, description, color, marca, category, grosor, unit, minQuantity, priceRef,
       categories,
       units,
@@ -152,10 +148,10 @@ export const HiloEdit = async (req, res) => {
 
   res.render("material/hilo/hiloEdit", {
       username: res.locals.user.username,
-      activeMateriales: indices[0].activeMateriales,
-      indice1: indices[0].indice1,
-      indice2: indices[0].indice2,
-      indice3: indices[0].indice3,
+      activeMateriales: indices.activeMateriales,
+      indice1: indices.indice1,
+      indice2: indices.indice2,
+      indice3: indices.indice3,
       hilo,
       categories,
       units,
@@ -232,10 +228,10 @@ export const HiloEditPost = async (req, res) => {
     res.render("material/hilo/hiloEdit", {
       errors,
       username: res.locals.user.username,
-      activeMateriales: indices[0].activeMateriales,
-      indice1: indices[0].indice1,
-      indice2: indices[0].indice2,
-      indice3: indices[0].indice3,
+      activeMateriales: indices.activeMateriales,
+      indice1: indices.indice1,
+      indice2: indices.indice2,
+      indice3: indices.indice3,
       hilo,
       categories,
       units,
@@ -269,10 +265,10 @@ export const CategoryHiloTable = async (req, res) => {
  
   res.render("material/hilo/hiloCategoryTable", {
       username: res.locals.user.username,
-      activeMateriales: indices[0].activeMateriales,
-      indice1: indices[0].indice1,
-      indice2: indices[0].indice2,
-      indice3: indices[0].indice3,
+      activeMateriales: indices.activeMateriales,
+      indice1: indices.indice1,
+      indice2: indices.indice2,
+      indice3: indices.indice3,
       categoria
     });
 }
@@ -283,10 +279,10 @@ export const CategoryHiloAdd = async (req, res) => {
 
   res.render("material/hilo/hiloCategoryForm", {
     username: res.locals.user.username,
-    activeMateriales: indices[0].activeMateriales,
-    indice1: indices[0].indice1,
-    indice2: indices[0].indice2,
-    indice3: indices[0].indice3,
+    activeMateriales: indices.activeMateriales,
+    indice1: indices.indice1,
+    indice2: indices.indice2,
+    indice3: indices.indice3,
     proveedor
   });
 }
@@ -324,10 +320,10 @@ export const CategoryHiloAddPost = async (req, res) => {
   if (errors.length > 0) {
     res.render("material/hilo/hiloCategoryForm", {
       username: res.locals.user.username,
-      activeMateriales: indices[0].activeMateriales,
-      indice1: indices[0].indice1,
-      indice2: indices[0].indice2,
-      indice3: indices[0].indice3,
+      activeMateriales: indices.activeMateriales,
+      indice1: indices.indice1,
+      indice2: indices.indice2,
+      indice3: indices.indice3,
       errors,
       name,
       code,
@@ -346,10 +342,10 @@ export const CategoryHiloEdit = async (req, res) => {
   const proveedor = await Proveedores.find().lean();
   res.render("material/hilo/hiloCategoryEdit", {
     username: res.locals.user.username,
-    activeMateriales: indices[0].activeMateriales,
-    indice1: indices[0].indice1,
-    indice2: indices[0].indice2,
-    indice3: indices[0].indice3,
+    activeMateriales: indices.activeMateriales,
+    indice1: indices.indice1,
+    indice2: indices.indice2,
+    indice3: indices.indice3,
     categoria,
     proveedor
   });
@@ -400,10 +396,10 @@ export const CategoryHiloEditPost = async (req, res) => {
   if (errors.length > 0) {
     res.render("material/hilo/hiloCategoryEdit", {
       username: res.locals.user.username,
-      activeMateriales: indices[0].activeMateriales,
-      indice1: indices[0].indice1,
-      indice2: indices[0].indice2,
-      indice3: indices[0].indice3,
+      activeMateriales: indices.activeMateriales,
+      indice1: indices.indice1,
+      indice2: indices.indice2,
+      indice3: indices.indice3,
       errors,
       categoria,
       proveedor

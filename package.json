@@ -3,8 +3,13 @@
   "version": "1.0.1",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "16.*"
+  },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon src/app.js --exec babel-node"
+    "dev": "cross-env NODE_ENV=development nodemon src/app.js --exec babel-node",
+    "build": "babel src -d dist --copy-files",
+    "start": "node dist/app.js"
   },
   "author": "LeeChang",
   "license": "ISC",
@@ -25,9 +30,12 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.19.3",
-    "@babel/core": "^7.20.2",
-    "@babel/node": "^7.20.2",
-    "@babel/preset-env": "^7.20.2"
+    "@babel/cli": "^7.20.7",
+    "@babel/core": "^7.20.12",
+    "@babel/node": "^7.20.7",
+    "@babel/plugin-transform-runtime": "^7.19.6",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/runtime": "^7.20.13",
+    "nodemon": "^2.0.20"
   }
 }
