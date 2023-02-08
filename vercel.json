@@ -1,6 +1,18 @@
 {
-    "version": 2,
-    "installCommand": "npm install",
-    "buildCommand": "npm run build",
-    "rewrites": [{ "source": "/src/(.*)", "destination": "/" }]
+  "version": 2,
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "alias": ["SIOP-LeeChang"],
+  "builds": [{ "src": "src/app.js", "use": "@vercel/node" }],
+  "routes": [
+    {
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+      },
+      "src": "/(.*)",
+      "dest": "/app.js"
+    }
+  ]
 }
