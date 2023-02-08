@@ -3,7 +3,7 @@
    "installCommand": "npm install",
    "buildCommand": "npm run build",
    "builds": [
-       { "src": "src/app.js", "use": "@vercel/node" }
+       { "src": "dist/app.js", "use": "@vercel/node" }
     ],
     "routes": [
        { "src": "/(.*)", "dest": "dist/app.js" }
