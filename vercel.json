@@ -1,11 +1,26 @@
 {
    "version": 2,
-   "installCommand": "npm install",
-   "buildCommand": "npm run build",
    "builds": [
-       { "src": "dist/app.js", "use": "@vercel/node" }
-    ],
-    "routes": [
-       { "src": "/(.*)", "dest": "dist/app.js" }
-    ]
-}
+     {
+       "src": "dist/app.js",
+       "use": "@vercel/node",
+       "config": {
+         "env": {
+           "NODE_ENV": "production"
+         }
+       }
+     }
+   ],
+   "routes": [
+     {
+       "src": "/.*",
+       "dest": "/dist/app.js"
+     }
+   ],
+   "env": {
+     "NODE_ENV": "production"
+   },
+   "scripts": {
+     "build": "npm run build"
+   }
+ }
